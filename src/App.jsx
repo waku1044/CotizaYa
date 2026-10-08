@@ -1,7 +1,8 @@
 import  { useState } from 'react';
-import DocumentForm from './componentes/DocumentForm';
-import ClientForm from './componentes/ClienteForm';
-import ArticleForm from './componentes/ArticulosForm';
+import DocumentForm from './pages/DocumentForm';
+import ClientForm from './pages/ClienteForm';
+import ArticleForm from './pages/ArticulosForm';
+import ListaDeArticulos from './componentes/ListaDeArticulos';
 
 export default function App() {
   // Estado para controlar la pantalla activa: 'facturas' | 'presupuestos' | 'clientes' | 'articulos'
@@ -16,8 +17,10 @@ export default function App() {
         return <DocumentForm type="presupuesto" />;
       case 'clientes':
         return <ClientForm />;
-      case 'articulos':
+      case 'creararticulos':
         return <ArticleForm />;
+      case 'articulos':
+        return <ListaDeArticulos />;
       default:
         return <DocumentForm type="factura" />;
     }
@@ -76,6 +79,17 @@ export default function App() {
           >
             <span className="text-xl">📦</span>
             <span className="text-[11px] mt-0.5">Artículos</span>
+          </button>
+
+          {/* Botón Crear Artículos */}
+          <button 
+            onClick={() => setCurrentScreen('creararticulos')}
+            className={`flex flex-col items-center justify-center w-full h-full transition-colors ${
+              currentScreen === 'articulos' ? 'text-blue-600 font-semibold' : 'text-gray-400 hover:text-gray-600'
+            }`}
+          >
+            <span className="text-xl">📦</span>
+            <span className="text-[11px] mt-0.5"> Crear Artículos</span>
           </button>
 
         </div>
