@@ -1,19 +1,29 @@
 import { useState, useEffect } from 'react';
+import {  Calendar } from 'lucide-react';
 
-export default function DocumentForm({ type = 'factura' }) {
+export default function CrearFacPre({ type = 'factura' }) {
   const isInvoice = type === 'factura';
   const prefix = isInvoice ? 'FAC' : 'PRE';
   const currentYear = new Date().getFullYear();
 
+
+
+  // Helper para generar una fecha de vencimiento por defecto (Ej: hoy + 15 días)
+  const getDefaultDueDateString = (daysAhead = 10) => {
+    const fechaDeEmision = new fechaDeEmision();
+    fechaDeEmision.setDate(fechaDeEmision.getDate() + daysAhead);
+    return fechaDeEmision.toISOString().split('T')[0];
+  };
+
   const [formData, setFormData] = useState({
-    number: `${prefix}${currentYear}/1`,
-    date: new Date().toISOString().split('T')[0],
-    dueDate: '',
-    company: 'WalTech Refrigeración / Electricidad Domiciliaria',
-    client: '', 
+    serie: `${prefix}${currentYear}/1`,
+    fechaDeEmision: new Date().toISOString().split('T')[0],
+    fechaDeVencimiento: getDefaultDueDateString,
+    empresa: 'WalTech Refrigeración / Electricidad Domiciliaria',
+    cliente: '', 
     items: [],
-    terms: true,
-    paymentMethod: '',
+    terminos: true,
+    metodoDePago: '',
   });
 
   const [total, setTotal] = useState(0);
@@ -56,10 +66,10 @@ export default function DocumentForm({ type = 'factura' }) {
 
   const addArticle = (articulo) => {
     const newItem = {
-      articuloId: articulo.id,
-      name: articulo.descripcion || articulo.nombre,
-      price: articulo.precioUnitario || articulo.precio || 0,
-      quantity: 1,
+      id: articulo.id,
+      nombre: articulo.descripcion || articulo.nombre,
+      precio: articulo.precioUnitario || articulo.precio || 0,
+      cantidad: 1,
       id_line: Date.now()
     };
     setFormData({ ...formData, items: [...formData.items, newItem] });
@@ -71,7 +81,7 @@ export default function DocumentForm({ type = 'factura' }) {
       if (item.id_line === id_line) {
         return { 
           ...item, 
-          [field]: value === '' ? '' : (field === 'quantity' ? parseInt(value) : parseFloat(value))
+          [field]: value === '' ? '' : (field === 'cantidad' ? parseInt(value) : parseFloat(value))
         };
       }
       return item;
@@ -86,8 +96,8 @@ export default function DocumentForm({ type = 'factura' }) {
 
   useEffect(() => {
     const calculatedTotal = formData.items.reduce((acc, item) => {
-      const q = item.quantity === '' ? 0 : item.quantity;
-      const p = item.price === '' ? 0 : item.price;
+      const q = item.cantidad === '' ? 0 : item.cantidad;
+      const p = item.precio === '' ? 0 : item.precio;
       return acc + (p * q);
     }, 0);
     setTotal(calculatedTotal);
@@ -115,7 +125,7 @@ export default function DocumentForm({ type = 'factura' }) {
             <span className="text-gray-400 text-lg">📄</span>
             <div className="w-full">
               <label className="block text-xs font-medium text-gray-500">Número</label>
-              <input type="text" value={formData.number} onChange={(e) => setFormData({...formData, number: e.target.value})} className="w-full text-sm font-semibold text-gray-800 bg-transparent focus:outline-none" />
+              <input type="text" value={formData.serie} onChange={(e) => setFormData({...formData, serie: e.target.value})} className="w-full text-sm font-semibold text-gray-800 bg-transparent focus:outline-none" />
             </div>
           </div>
           <span className="text-blue-500 text-sm">✓</span>
@@ -127,22 +137,27 @@ export default function DocumentForm({ type = 'factura' }) {
             <span className="text-gray-400 text-lg">📅</span>
             <div className="w-full">
               <label className="block text-xs font-medium text-gray-500">Fecha</label>
-              <input type="date" value={formData.date} onChange={(e) => setFormData({...formData, date: e.target.value})} className="w-full text-sm text-gray-800 bg-transparent focus:outline-none" />
+              <input type="fechaDeEmision" value={formData.fechaDeEmision} onChange={(e) => setFormData({...formData, fechaDeEmision: e.target.value})} className="w-full text-sm text-gray-800 bg-transparent focus:outline-none" />
             </div>
           </div>
           <span className="text-blue-500 text-sm">✓</span>
         </div>
 
-        {/* Bloque: Fecha Vencimiento */}
-        <div className="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between">
+        {/* Bloque: Fecha Vencimiento (CORREGIDO Y ESTILIZADO) */}
+        <div className="bg-white p-3.5 rounded-xl border border-gray-200 flex items-center justify-between focus-within:ring-2 focus-within:ring-cyan-100 focus-within:border-cyan-600 transition-all shadow-sm">
           <div className="flex items-center space-x-3 w-full">
-            <span className="text-gray-400 text-lg">📅</span>
+            <Calendar className="text-cyan-600 w-5 h-5 shrink-0" />
             <div className="w-full">
-              <label className="block text-xs font-medium text-gray-500">Fecha de vencimiento</label>
-              <input type="date" value={formData.dueDate} onChange={(e) => setFormData({...formData, dueDate: e.target.value})} className="w-full text-sm text-gray-800 bg-transparent focus:outline-none" />
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-cyan-700">Fecha de Vencimiento</label>
+              <input 
+                type="fechaDeEmision" 
+                value={formData.fechaDeVencimiento} 
+                onChange={(e) => setFormData({...formData, fechaDeVencimiento: e.target.value})} 
+                className="w-full text-sm font-semibold text-gray-800 bg-transparent focus:outline-none pt-0.5" 
+              />
             </div>
           </div>
-          <span className="text-gray-400">➔</span>
+          <span className="text-cyan-600 font-bold text-sm">➔</span>
         </div>
 
         {/* Bloque: Emisor Empresa */}
@@ -150,7 +165,7 @@ export default function DocumentForm({ type = 'factura' }) {
           <div className="flex items-center space-x-3 w-full">
             <span className="text-gray-400 text-lg">💼</span>
             <div className="w-full">
-              <input type="text" value={formData.company} onChange={(e) => setFormData({...formData, company: e.target.value})} className="w-full text-sm font-medium text-gray-800 bg-transparent focus:outline-none" />
+              <input type="text" value={formData.empresa} onChange={(e) => setFormData({...formData, empresa: e.target.value})} className="w-full text-sm font-medium text-gray-800 bg-transparent focus:outline-none" />
             </div>
           </div>
           <span className="text-blue-500 text-sm">✓</span>
@@ -162,7 +177,7 @@ export default function DocumentForm({ type = 'factura' }) {
             <span className="text-gray-400 text-lg">👤</span>
             <div className="w-full">
               <label className="block text-xs font-medium text-gray-500">Cliente</label>
-              <select value={formData.client} onChange={(e) => setFormData({...formData, client: e.target.value})} className="w-full text-sm text-gray-700 bg-transparent focus:outline-none appearance-none" >
+              <select value={formData.cliente} onChange={(e) => setFormData({...formData, cliente: e.target.value})} className="w-full text-sm text-gray-700 bg-transparent focus:outline-none appearance-none" >
                 <option value="">{errorClientes ? errorClientes : 'Seleccionar cliente'}</option>
                 {clientes.map(cliente => (
                   <option key={cliente.id} value={cliente.id}>
@@ -200,19 +215,19 @@ export default function DocumentForm({ type = 'factura' }) {
         {formData.items.length > 0 && (
           <div className="bg-white rounded-lg border border-gray-200 p-2 space-y-2">
             {formData.items.map((item) => {
-              const priceSafe = typeof item.price === 'number' ? item.price : parseFloat(item.price) || 0;
-              const quantitySafe = typeof item.quantity === 'number' ? item.quantity : parseInt(item.quantity) || 0;
+              const priceSafe = typeof item.precio === 'serie' ? item.precio : parseFloat(item.precio) || 0;
+              const quantitySafe = typeof item.cantidad === 'serie' ? item.cantidad : parseInt(item.cantidad) || 0;
               return (
                 <div key={item.id_line} className="flex justify-between items-center text-xs p-2 bg-gray-50 rounded space-x-2">
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-800 truncate">{item.name}</p>
+                    <p className="font-medium text-gray-800 truncate">{item.nombre}</p>
                     <div className="flex items-center space-x-2 mt-1">
                       {/* Input Cantidad */}
                       <input 
-                        type="number" 
+                        type="serie" 
                         min="1"
-                        value={item.quantity} 
-                        onChange={(e) => updateItem(item.id_line, 'quantity', e.target.value)}
+                        value={item.cantidad} 
+                        onChange={(e) => updateItem(item.id_line, 'cantidad', e.target.value)}
                         className="w-12 text-center border rounded bg-white p-0.5 font-medium text-gray-700 focus:ring-1 focus:ring-cyan-500 focus:outline-none"
                       />
                       <span className="text-gray-400">x</span>
@@ -220,11 +235,11 @@ export default function DocumentForm({ type = 'factura' }) {
                       <div className="flex items-center border rounded bg-white px-1">
                         <span className="text-gray-400 mr-0.5">$</span>
                         <input 
-                          type="number" 
+                          type="serie" 
                           step="0.01"
                           min="0"
-                          value={item.price} 
-                          onChange={(e) => updateItem(item.id_line, 'price', e.target.value)}
+                          value={item.precio} 
+                          onChange={(e) => updateItem(item.id_line, 'precio', e.target.value)}
                           className="w-16 text-left p-0.5 font-medium text-gray-700 focus:outline-none"
                         />
                       </div>

@@ -1,0 +1,43 @@
+/* Contenedor que ancla el botón de forma fija en la esquina inferior derecha */
+.contenedor-boton-inferior {  
+  position: fixed; /* [CAMBIO] 'fixed' hace que flote sobre la pantalla sin importar el scroll */
+  bottom: 13%;    /* [CAMBIO] Lo subimos un poco para que no se tape con tu nuevo Nav de abajo */
+  right: 24%;     /* [CAMBIO] Distancia fija desde el borde derecho para que no baile en móvil */
+  z-index: 40;     /* [CAMBIO] Mayor z-index para que quede por encima de las listas */
+}
+
+/* El botón circular perfecto */
+.btn-flotante {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #0e7490; /* cyan-700 */
+  color: white;
+  font-size: 28px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.btn-flotante:hover {
+  background-color: #155e75; /* cyan-800 */
+  transform: scale(1.05);
+}
+
+.btn-flotante:active {
+  transform: scale(0.95); /* Efecto de rebote al presionarlo */
+}
+
+/* Ajustes automáticos para pantallas pequeñas (Móviles) */
+@media screen and (max-width: 607px) {
+  .btn-flotante {
+    position: fixed;   /* Hace que flote sobre la pantalla sin importar el scroll */
+    bottom: 13%;      /* Separación desde el borde inferior */
+    right: 33px;       /* Separación desde el borde derecho */
+    z-index: 1000;     /* Asegura que quede por encima de todo el contenido */
+    
+}}
