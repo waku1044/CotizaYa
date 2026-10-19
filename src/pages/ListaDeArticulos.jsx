@@ -42,7 +42,8 @@ const ListaDeArticulos = () => {
             .then(() => {
                 setArticulos(articulos.map(art => 
                     art.id === id 
-                        ? { ...art, descripcion: descripcionEditando, precioUnitario: precioNumerico } 
+                        ? { ...art, descripcion: descripcionEditando, precio
+                            : precioNumerico } 
                         : art
                 ));
                 cancelarEdicion();
@@ -106,7 +107,7 @@ const ListaDeArticulos = () => {
                                 ) : (
                                     <div className="flex flex-col flex-1 min-w-0 pr-4">
                                         <h5 className='text-xl font-semibold text-gray-900'>
-                                            {articulo.nombre || articulo.descripcion}
+                                            {articulo.nombre || '' }
                                         </h5>
                                         <span className="text-gray-500 text-sm font-normal max-w-[90%] leading-tight mt-1 truncate">
                                             {articulo.descripcion}
