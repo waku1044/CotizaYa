@@ -38,7 +38,7 @@ const ListaDeArticulos = () => {
 
     const guardarEdicion = (id) => {
         const precioNumerico = parseFloat(precioEditando) || 0;
-        ServicioArticulos.actualizarArticulo(id, descripcionEditando, precioNumerico)
+        ServicioArticulos.actualizarArticulo(id, {descripcion:descripcionEditando, precio:precioNumerico})
             .then(() => {
                 setArticulos(articulos.map(art => 
                     art.id === id 
