@@ -94,7 +94,7 @@ const ListaDeArticulos = () => {
                                             className="flex-1 text-sm border rounded px-2 py-1 focus:ring-1 focus:ring-cyan-500 focus:outline-none font-medium text-gray-800"
                                         />
                                         <div className="flex items-center border rounded bg-white px-2 py-1 w-28">
-                                            <span className="text-gray-400 text-sm">\$</span>
+                                            <span className="text-gray-400 text-sm">$</span>
                                             <input 
                                                 type="number"
                                                 step="0.01"
