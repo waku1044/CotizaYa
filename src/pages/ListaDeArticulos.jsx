@@ -27,7 +27,7 @@ const ListaDeArticulos = () => {
     const iniciarEdicion = (articulo) => {
         setIdEditando(articulo.id);
         setDescripcionEditando(articulo.descripcion || '');
-        setPrecioEditando(articulo.precioUnitario || '');
+        setPrecioEditando(articulo.precio || '');
     };
 
     const cancelarEdicion = () => {
@@ -68,7 +68,7 @@ const ListaDeArticulos = () => {
                 
                 {/* Encabezado Superior */}
                 <div className="bg-cyan-800 border-b border-gray-200 px-4 py-3 flex items-center justify-around sticky top-0 z-10">
-                    <button type="button" className="text-white hover:text-gray-200 text-xl font-bold">←</button>
+                    
                     <h1 className="text-lg font-semibold text-white">Lista de Artículos</h1>
                     <div className="w-5"></div>
                 </div>

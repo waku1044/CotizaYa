@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import {  Calendar } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react'; 
+import { useNavigate } from 'react-router-dom'
 
 export default function CrearFacPre({ type = 'factura' }) {
   const isInvoice = type === 'factura';
   const prefix = isInvoice ? 'FAC' : 'PRE';
   const currentYear = new Date().getFullYear();
-
+  const navigate = useNavigate();
 
 
   // Helper para generar una fecha de vencimiento por defecto (Ej: hoy + 15 días)
@@ -113,7 +115,13 @@ export default function CrearFacPre({ type = 'factura' }) {
     <div className="max-w-xl mx-auto bg-gray-50 min-h-screen pb-24 shadow-sm border border-gray-200">
       {/* Cabecera superior fija */}
       <div className="bg-cyan-800 border-b border-gray-200 px-4 py-3 flex items-center justify-between sticky top-0 z-10">
-        <button type="button" className="text-white hover:text-gray-200 text-xl font-bold">←</button>
+        <button 
+          type="button" 
+          onClick={() => navigate(-1)}
+          className="text-white hover:bg-cyan-700/50 p-2 rounded-full transition-colors"
+        >
+          <ArrowLeft className="w-6 h-6" />
+        </button>
         <h1 className="text-lg font-semibold text-white capitalize">Crear {type}</h1>
         <button type="submit" form="doc-form" className="text-emerald-400 hover:text-emerald-300 text-xl font-bold">✓</button>
       </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, MapPin, Building2, Phone, Mail, ArrowLeft, Check, AlertTriangle } from 'lucide-react'; // [NUEVO] Iconos modernos
+import { ServicioClientes } from '../service/ServicioClientes';
 
 export default function ClientForm() {
   const navigate = useNavigate();
@@ -24,25 +25,16 @@ export default function ClientForm() {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/api/clientes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          nombre: client.nombre,
-          ciudad: client.ciudad,
-          direccion: client.direccion,
-          telefono: client.telefono,
-          email: client.email
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Ocurrió un error al guardar el cliente.');
+      const cliente = {
+        nombre: client.nombre,
+        ciudad: client.ciudad,
+        direccion: client.direccion,
+        telefono: client.telefono,
+        email: client.email
       }
+      console.log(cliente)
+      await ServicioClientes.guardarClientes(cliente);
+      
 
       alert("Cliente registrado exitosamente en Waltech.");
       setClient({
