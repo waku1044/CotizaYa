@@ -32,10 +32,14 @@
             await addDoc(articulosDB, articuloCompleto);
         },
 
-        actualizarArticulo: async(id)=>{
-            const artRef = doc(db, 'articulos', id);
+        actualizarArticulo: async (id, datosActualizados) => {
+    // 1. Localiza el documento por su ID dentro de la colección 'articulos'
+    const artRef = doc(db, 'articulos', id);
 
-            await updateDoc(artRef);
+    // 2. Envía los nuevos datos para actualizar los campos correspondientes
+    await updateDoc(artRef, datosActualizados);
+}
+
         },
 
         eliminarArticulo: async (id)=>{
