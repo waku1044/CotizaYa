@@ -1,7 +1,7 @@
 import BotonAgregar from "../componentes/boton_agregar/BotonAgregar";
 import { useState, useEffect } from 'react';
 import { ServicioClientes } from "../service/ServicioClientes";
-// import { Pencil, Trash2, Check, X } from 'lucide-react';
+import { Pencil, Trash2, Check, X } from 'lucide-react';
 
 const ListaDeClientes = () => {
 const [clientes, setClientes] = useState([]);
@@ -66,13 +66,13 @@ const [clientes, setClientes] = useState([]);
                 {/* Botón Editar (Descomentar Lucide si usás Pencil) */}
                 <button className="p-2 text-slate-400 hover:text-cyan-600 hover:bg-cyan-50 rounded-xl transition-colors" title="Editar">
                     <span className="text-xs font-medium">Editar</span>
-                    {/* <Pencil className="w-4 h-4" /> */}
+                    <Pencil className="w-4 h-4" /> 
                 </button>
 
                 {/* Botón Eliminar (Descomentar Lucide si usás Trash2) */}
                 <button className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition-colors" title="Eliminar">
-                    <span className="text-xs font-medium">Borrar</span>
-                    {/* <Trash2 className="w-4 h-4" /> */}
+                    {//<span className="text-xs font-medium">Borrar</span>}
+                     <Trash2 className="w-4 h-4" /> 
                 </button>
             </div>
         </div>
