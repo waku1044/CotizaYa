@@ -8,7 +8,12 @@ const ListaDeArticulos = () => {
     const [cargando, setCargando] = useState(true); 
     const [error, setError] = useState(null);
 
-    const [idEditando, setIdEditando] = useState(null);
+    const [nuevoArticulo, setNuevoArticulo ] = useState({
+        id:'',
+        descripcion:'',
+        precio:''
+    })
+     const [idEditando, setIdEditando] = useState(null);
     const [descripcionEditando, setDescripcionEditando] = useState('');
     const [precioEditando, setPrecioEditando] = useState('');
 
@@ -25,6 +30,7 @@ const ListaDeArticulos = () => {
     }, []);
 
     const iniciarEdicion = (articulo) => {
+        console.log('IniciarEdicion: ', articulo.precio)
         setIdEditando(articulo.id);
         setDescripcionEditando(articulo.descripcion || '');
         setPrecioEditando(articulo.precio || '');
@@ -38,26 +44,38 @@ const ListaDeArticulos = () => {
 
     const guardarEdicion = (id) => {
         const precioNumerico = parseFloat(precioEditando) || 0;
-        ServicioArticulos.actualizarArticulo(id, {descripcion:descripcionEditando, precio:precioNumerico})
+        console.log('guardarEdicion',id,descripcionEditando,precioNumerico)
+        setNuevoArticulo({
+            id:id,
+            descripcion:descripcionEditando,
+            precio:precioNumerico
+        })
+        ServicioArticulos.actualizarArticulo(id, nuevoArticulo)
             .then(() => {
+                alert('Articulo Editado')
                 setArticulos(articulos.map(art => 
                     art.id === id 
                         ? { ...art, descripcion: descripcionEditando, precio
                             : precioNumerico } 
                         : art
-                ));
-                cancelarEdicion();
+                 ));
+                 cancelarEdicion();
             })
             .catch(err => alert('⚠️ ' + err.message));
     };
 
     const eliminarArticulo = (id) => {
-        if (!window.confirm('¿Estás seguro de que deseas eliminar este artículo?')) return;
+        if (window.confirm('¿Estás seguro de que deseas eliminar este artículo?')){
+
+            console.log('Eliminar Articulo: ',id)
         ServicioArticulos.eliminarArticulo(id)
             .then(() => {
                 setArticulos(articulos.filter(art => art.id !== id));
             })
             .catch(err => alert('⚠️ ' + err.message));
+        }else{
+            alert('No se guardo')
+        }
     };
 
     if (cargando) return <div className="text-center p-4">Cargando artículos...</div>;
@@ -152,6 +170,7 @@ const ListaDeArticulos = () => {
             </div>
         </div>
     );
-};
+}
+
 
 export default ListaDeArticulos;
