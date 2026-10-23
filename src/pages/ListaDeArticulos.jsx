@@ -8,12 +8,8 @@ const ListaDeArticulos = () => {
     const [cargando, setCargando] = useState(true); 
     const [error, setError] = useState(null);
 
-    const [nuevoArticulo, setNuevoArticulo ] = useState({
-        id:'',
-        descripcion:'',
-        precio:''
-    })
-     const [idEditando, setIdEditando] = useState(null);
+    // Estados para la edición local
+    const [idEditando, setIdEditando] = useState(null);
     const [descripcionEditando, setDescripcionEditando] = useState('');
     const [precioEditando, setPrecioEditando] = useState('');
 
@@ -30,7 +26,6 @@ const ListaDeArticulos = () => {
     }, []);
 
     const iniciarEdicion = (articulo) => {
-        console.log('IniciarEdicion: ', articulo.precio)
         setIdEditando(articulo.id);
         setDescripcionEditando(articulo.descripcion || '');
         setPrecioEditando(articulo.precio || '');
@@ -44,37 +39,35 @@ const ListaDeArticulos = () => {
 
     const guardarEdicion = (id) => {
         const precioNumerico = parseFloat(precioEditando) || 0;
-        console.log('guardarEdicion',id,descripcionEditando,precioNumerico)
-        setNuevoArticulo({
-            id:id,
-            descripcion:descripcionEditando,
-            precio:precioNumerico
-        })
-        ServicioArticulos.actualizarArticulo(id, nuevoArticulo)
+        
+        // 1. Creamos el objeto actualizado directamente aquí
+        const articuloActualizado = {
+            id: id,
+            descripcion: descripcionEditando,
+            precio: precioNumerico
+        };
+
+        // 2. Enviamos el objeto local (no el estado) al servicio
+        ServicioArticulos.actualizarArticulo(id, articuloActualizado)
             .then(() => {
-                alert('Articulo Editado')
+                alert('Artículo Editado');
                 setArticulos(articulos.map(art => 
                     art.id === id 
-                        ? { ...art, descripcion: descripcionEditando, precio
-                            : precioNumerico } 
+                        ? { ...art, descripcion: descripcionEditando, precio: precioNumerico } 
                         : art
-                 ));
-                 cancelarEdicion();
+                ));
+                cancelarEdicion();
             })
             .catch(err => alert('⚠️ ' + err.message));
     };
 
     const eliminarArticulo = (id) => {
         if (window.confirm('¿Estás seguro de que deseas eliminar este artículo?')){
-
-            console.log('Eliminar Articulo: ',id)
-        ServicioArticulos.eliminarArticulo(id)
-            .then(() => {
-                setArticulos(articulos.filter(art => art.id !== id));
-            })
-            .catch(err => alert('⚠️ ' + err.message));
-        }else{
-            alert('No se guardo')
+            ServicioArticulos.eliminarArticulo(id)
+                .then(() => {
+                    setArticulos(articulos.filter(art => art.id !== id));
+                })
+                .catch(err => alert('⚠️ ' + err.message));
         }
     };
 
@@ -85,14 +78,11 @@ const ListaDeArticulos = () => {
         <div className="max-w-xl mx-auto bg-gray-50 min-h-screen p-4 flex flex-col justify-between">
             <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden flex flex-col flex-1">
                 
-                {/* Encabezado Superior */}
                 <div className="bg-cyan-800 border-b border-gray-200 px-4 py-3 flex items-center justify-around sticky top-0 z-10">
-                    
                     <h1 className="text-lg font-semibold text-white">Lista de Artículos</h1>
                     <div className="w-5"></div>
                 </div>
 
-                {/* Cuerpo de la Lista */}
                 <div className="flex-1 overflow-y-auto mb-16"> 
                     {articulos.map((articulo, index) => {
                         const estaEditando = idEditando === articulo.id;
@@ -112,7 +102,7 @@ const ListaDeArticulos = () => {
                                             className="flex-1 text-sm border rounded px-2 py-1 focus:ring-1 focus:ring-cyan-500 focus:outline-none font-medium text-gray-800"
                                         />
                                         <div className="flex items-center border rounded bg-white px-2 py-1 w-28">
-                                            <span className="text-gray-400 text-sm">$</span>
+                                            <span className="text-gray-400 text-sm">\$</span>
                                             <input 
                                                 type="number"
                                                 step="0.01"
@@ -124,12 +114,10 @@ const ListaDeArticulos = () => {
                                     </div>
                                 ) : (
                                     <div className="flex flex-col flex-1 min-w-0 pr-4">
+                                        {/* Corregido: antes decía articulo.nombre */}
                                         <h5 className='text-xl font-semibold text-gray-900'>
-                                            {articulo.nombre || '' }
+                                            {articulo.descripcion || 'Sin descripción'}
                                         </h5>
-                                        <span className="text-gray-500 text-sm font-normal max-w-[90%] leading-tight mt-1 truncate">
-                                            {articulo.descripcion}
-                                        </span>
                                         <span className="text-cyan-700 text-sm font-semibold mt-1">
                                             ${articulo.precio}
                                         </span>
@@ -160,17 +148,14 @@ const ListaDeArticulos = () => {
                             </div>
                         );
                     })}
+                            {/* 📌 Contenedor del Botón Flotante Fijo abajo a la derecha */}
+                        <div className="fixed bottom-6 right-6 z-50 unique-btn-container">
+                            <BotonAgregar className="btn-flotante shadow-lg" tipo='crearArticulo' />
+                        </div>
                 </div>
-
-                {/* 📌 Contenedor del Botón en la parte inferior de la lista */}
-                <div className="contenedor-boton-inferior">
-                    <BotonAgregar className="btn-flotante" tipo='crearArticulo' />
-                </div>
-
             </div>
         </div>
     );
-}
-
+};
 
 export default ListaDeArticulos;
