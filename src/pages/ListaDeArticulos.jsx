@@ -65,7 +65,9 @@ const ListaDeArticulos = () => {
         if (window.confirm('¿Estás seguro de que deseas eliminar este artículo?')){
             ServicioArticulos.eliminarArticulo(id)
                 .then(() => {
+                    console.log(articulos.filter(art => art.id !== id))
                     setArticulos(articulos.filter(art => art.id !== id));
+                    alert('Articulo Eliminado')
                 })
                 .catch(err => alert('⚠️ ' + err.message));
         }
@@ -113,8 +115,9 @@ const ListaDeArticulos = () => {
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="flex flex-col flex-1 min-w-0 pr-4">
+                                    <div className="flex flex-col flex-1 min-w-0 pr-4 bg-green-50/60 p-4 rounded-xl border border-green-100 shadow-sm transition-all hover:shadow-md">
                                         {/* Corregido: antes decía articulo.nombre */}
+                                        <h3 className='text-xl font-semibold text-green-900' >{articulo.nombre}</h3>
                                         <h5 className='text-xl font-semibold text-gray-900'>
                                             {articulo.descripcion || 'Sin descripción'}
                                         </h5>
@@ -149,7 +152,7 @@ const ListaDeArticulos = () => {
                         );
                     })}
                             {/* 📌 Contenedor del Botón Flotante Fijo abajo a la derecha */}
-                        <div className="fixed bottom-6 right-6 z-50 unique-btn-container">
+                        <div className="fixed bottom-20 right-60 z-50 unique-btn-container">
                             <BotonAgregar className="btn-flotante shadow-lg" tipo='crearArticulo' />
                         </div>
                 </div>

@@ -38,15 +38,14 @@
 
     // 2. Envía los nuevos datos para actualizar los campos correspondientes
     await updateDoc(artRef, datosActualizados);
-}
+},
 
-        },
-
-        eliminarArticulo = async (id)=>{
+        eliminarArticulo : async (id)=>{
             const artRef = doc(db,'articulos', id);
 
             await deleteDoc(artRef)
         }
+    }
     
 
 
