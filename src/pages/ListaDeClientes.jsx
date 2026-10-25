@@ -60,7 +60,7 @@ const ListaDeClientes = () => {
     if (window.confirm("¿Estás seguro de que deseas eliminar este cliente?")) {
        ServicioClientes.eliminarCliente(id)
          .then(()=>{
-           setClientes(cliente.filter((c)=> c.id !== id))
+           setClientes(clientes.filter((c)=> c.id !== id))
            alert('Cliente eliminado')
          })
       .catch(err=>alert(err.message))

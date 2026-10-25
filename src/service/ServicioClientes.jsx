@@ -38,7 +38,7 @@
         },
 
         eliminarCliente: async (id)=>{
-            const cliRef = doc(db,'cliente', id);
+            const cliRef = doc(db,'clientes', id);
 
             await deleteDoc(cliRef)
         }
