@@ -25,16 +25,16 @@
 
         },
 
-        guardarClientes: async(clienteCompleto)=>{
+        guardarCliente: async(clienteCompleto)=>{
             const clientesDB = collection(db,'clientes');
 
             await addDoc(clientesDB, clienteCompleto);
         },
 
-        actualizarCliente: async(id)=>{
+        actualizarCliente: async(id, datosActualizados)=>{
             const cliRef = doc(db, 'clientes', id);
 
-            await updateDoc(cliRef);
+            await updateDoc(cliRef, datosActualizados);
         },
 
         eliminarCliente: async (id)=>{
