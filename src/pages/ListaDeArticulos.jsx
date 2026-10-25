@@ -99,7 +99,7 @@
               <div className="w-5"></div>
             </div>
 
-            <div className="flex-1 overflow-y-auto mb-16">
+            <div className="flex-1 overflow-y-auto mb-16 bg-cyan-900">
               {articulos.map((articulo, index) => {
                 const estaEditando = idEditando === articulo.id;
                 return (
