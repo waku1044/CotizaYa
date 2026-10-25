@@ -56,10 +56,33 @@ const ListaDeClientes = () => {
     cancelarEdicion();
   };
 
+
+  const eliminarArticulo = (id) => {
+        if (window.confirm("¿Estás seguro de que deseas eliminar este artículo?")) {
+          ServicioArticulos.eliminarArticulo(id)
+            .then(() => {
+              console.log(articulos.filter((art) => art.id !== id));
+              setArticulos(articulos.filter((art) => art.id !== id));
+              alert("Articulo Eliminado");
+            })
+            .catch((err) => alert("⚠️ " + err.message));
+        }
+      };
+
+
+
+
+  
+
   const eliminarCliente = (id) => {
     if (window.confirm("¿Estás seguro de que deseas eliminar este cliente?")) {
-      // ServicioClientes.eliminarCliente(id).then(...)
-      setClientes(clientes.filter(c => c.id !== id));
+       ServicioClientes.eliminarCliente(id)
+         .then(()=>{
+           setCliente(cliente.filter((c)=> c.id !== id))
+           alert('Cliente eliminado')
+         })
+      .catch(err=>alert(err.message))
+      
     }
   };
 
