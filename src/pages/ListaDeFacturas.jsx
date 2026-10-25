@@ -1,7 +1,6 @@
 import BotonAgregar from '../componentes/boton_agregar/BotonAgregar';
 
 
-
 const ListaDeFacturas = ()=>{
     return(
         <div className="max-w-xl mx-auto bg-gray-50 min-h-screen p-4 flex flex-col justify-between">

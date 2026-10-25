@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import {  Calendar } from 'lucide-react';
 import { ArrowLeft } from 'lucide-react'; 
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import { ServicioArticulos } from '../service/ServicioArticulos';
+import { ServicioClientes } from '../service/ServicioClientes';
 
 export default function CrearFacPre({ type = 'factura' }) {
   const isInvoice = type === 'factura';
@@ -35,14 +37,11 @@ export default function CrearFacPre({ type = 'factura' }) {
   const [errorArticulos, setErrorArticulos] = useState(null); 
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/clientes')
+    ServicioClientes.obtenerClientes()
       .then(response => {
-        if (!response.ok) throw new Error('Error al traer los clientes.');
-        return response.json();
-      })
-      .then(data => {
-        setClientes(data);
+        setClientes(response);
         setErrorClientes(null);
+        
       })
       .catch(err => {
         console.error(err);
@@ -50,19 +49,13 @@ export default function CrearFacPre({ type = 'factura' }) {
         setErrorClientes('No se pudieron cargar los clientes.');
       });
 
-    fetch('http://localhost:3000/api/articulos')
+    ServicioArticulos.obtenerArticulos()
       .then(response => {
-        if (!response.ok) throw new Error('Error al traer los artículos.');
-        return response.json();
-      })
-      .then(data => {
-        setArticulos(data);
+        setArticulos(response);
         setErrorArticulos(null);
       })
       .catch(err => {
-        console.error(err);
-        setArticulos([]);
-        setErrorArticulos('No se pudieron cargar los artículos.');
+        setErrorArticulos(err.message);
       });
   }, []);
 
