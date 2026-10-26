@@ -50,10 +50,16 @@ const ListaDeClientes = () => {
     };
 
     // Aquí llamarías a tu servicio, por ejemplo:
-    // ServicioClientes.actualizarCliente(id, clienteActualizado).then(...)
+     ServicioClientes.actualizarCliente(id, clienteActualizado)
+     .then(()=>{
+       setClientes(clientes.map(c => c.id === id ? { ...c, ...clienteActualizado } : c));
+       
+       cancelarEdicion();
+     })
+     .catch(err=>{
+      alert(err.message)
+     })
     
-    setClientes(clientes.map(c => c.id === id ? { ...c, ...clienteActualizado } : c));
-    cancelarEdicion();
   };
 
   const eliminarCliente = (id) => {
