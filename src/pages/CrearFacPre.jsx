@@ -18,9 +18,10 @@ export default function CrearFacPre({ type = 'factura' }) {
     fechaDeEmision.setDate(fechaDeEmision.getDate() + daysAhead);
     return fechaDeEmision.toISOString().split('T')[0];
   };
-
+  // Genera un sufijo alfanumérico aleatorio y único de 6 caracteres
+  const randomUnique = Math.random().toString(36).substring(2, 8).toUpperCase();
   const [formData, setFormData] = useState({
-    serie: `${prefix}${currentYear}/1`,
+    serie: `${prefix}${currentYear}/${randomUnique}`,
     fechaDeEmision: new Date().toISOString().split('T')[0],
     fechaDeVencimiento: getDefaultDueDateString,
     empresa: 'WalTech Refrigeración / Electricidad Domiciliaria',
