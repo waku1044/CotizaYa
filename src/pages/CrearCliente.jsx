@@ -33,7 +33,7 @@ export default function ClientForm() {
         email: client.email
       }
       console.log(cliente)
-      await ServicioClientes.guardarClientes(cliente);
+      await ServicioClientes.guardarCliente(cliente);
       
 
       alert("Cliente registrado exitosamente en Waltech.");
