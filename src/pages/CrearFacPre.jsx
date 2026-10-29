@@ -4,6 +4,8 @@ import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { ServicioArticulos } from '../service/ServicioArticulos';
 import { ServicioClientes } from '../service/ServicioClientes';
+import { ServicioPresupuestos } from '../service/ServicioPresupuestos';
+import { ServicioFacturas } from '../service/ServicioFacturas'
 
 export default function CrearFacPre({ type = 'factura' }) {
   const isInvoice = type === 'factura';
@@ -63,7 +65,7 @@ export default function CrearFacPre({ type = 'factura' }) {
   const addArticle = (articulo) => {
     const newItem = {
       id: articulo.id,
-      nombre: articulo.descripcion || articulo.nombre,
+      nombre:  articulo.nombre,
       precio: articulo.precioUnitario || articulo.precio || 0,
       cantidad: 1,
       id_line: Date.now()
@@ -101,8 +103,18 @@ export default function CrearFacPre({ type = 'factura' }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(`Guardando ${type}:`, formData, "Total:", total);
-    alert(`${isInvoice ? 'Factura' : 'Presupuesto'} guardado con éxito localmente.`);
+    {setFormData({...formData, total})}
+    if(isInvoice === 'factura'){
+      ServicioFacturas.guardarFacturas(formData)
+      console.log(`Guardando ${type}:`, formData, "Total:", total);
+      alert(`${isInvoice ? 'Factura' : 'Presupuesto'} guardado con éxito localmente.`);
+
+    }else{
+      ServicioPresupuestos.guardarPresupuesto(formData)
+      console.log(`Guardando ${type}:`, formData, "Total:", total);
+      alert(`${isInvoice ? 'Factura' : 'Presupuesto'} guardado con éxito localmente.`);
+      
+    }
   };
 
   return (
@@ -183,7 +195,7 @@ export default function CrearFacPre({ type = 'factura' }) {
                 <option value="">{errorClientes ? errorClientes : 'Seleccionar cliente'}</option>
                 {clientes.map(cliente => (
                   <option key={cliente.id} value={cliente.id}>
-                    {cliente.nombre} {cliente.email ? `(${cliente.email})` : ''}
+                    {cliente.nombre} {cliente.direccion ? `(${cliente.direccion})` : ''}
                   </option>
                 ))}
               </select>
@@ -204,10 +216,10 @@ export default function CrearFacPre({ type = 'factura' }) {
           }} className="w-full text-sm text-gray-700 bg-transparent border-0 focus:outline-none p-1 bg-gray-50 rounded" >
             <option value="">{errorArticulos ? errorArticulos : '➕ Elegir artículo para añadir...'}</option>
             {articulos.map(articulo => {
-              const precioExhibido = articulo.precioUnitario || articulo.precio || 0;
+              const precioExhibido =  articulo.precio || 0;
               return (
                 <option key={articulo.id} value={articulo.id}>
-                  {articulo.descripcion || articulo.nombre} - \${precioExhibido.toFixed(2)}
+                  { articulo.nombre} - ${precioExhibido.toFixed(2)}
                 </option>
               );
             })}
