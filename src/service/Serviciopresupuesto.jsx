@@ -1,12 +1,14 @@
+import { collection, getDocs, addDoc, deleteDoc, doc, updateDoc, getDoc} from 'firebase/firestore';
+import { db } from '../firebase/config';
 
 
 export const ServicioPresupuesto = {
 
-obtenerClientes: async ()=>{
+obtenerPresupuestos: async ()=>{
 
-            const clientesDB = collection(db,'clientes');
+            const presupuestosDB = collection(db,'presupuestos');
 
-            const resp = await getDocs(clientesDB);
+            const resp = await getDocs(presupuestosDB);
 
             return resp.docs.map((doc)=>{
                 return {
@@ -17,8 +19,8 @@ obtenerClientes: async ()=>{
 
         },
 
-        obtenerClientePorId: async(id)=>{
-            const cliRef = doc(db,'clientes', id);
+        obtenerPresupuestoPorId: async(id)=>{
+            const cliRef = doc(db,'presupuestos', id);
 
             await getDoc(cliRef);
 
